@@ -59,7 +59,7 @@ base_variant = dict(
             reward_scale=5.0,
 
             skill_config=dict(
-                skills=['atomic', 'open', 'reach', 'grasp', 'push'],
+                skills=['atomic','atomic_2' ,'open', 'reach', 'grasp', 'push'], # add new skill
                 aff_penalty_fac=15.0,
 
                 base_config=dict(
@@ -77,11 +77,14 @@ base_variant = dict(
                 atomic_config=dict(
                     use_ori_params=True,
                 ),
+                atomic_2_config=dict(
+                    use_ori_params=True,
+                ),
                 reach_config=dict(
                     use_gripper_params=False,
                     local_xyz_scale=[0.0, 0.0, 0.06],
                     use_ori_params=False,
-                    max_ac_calls=15,
+                    max_ac_calls=15, # higher affordance
                 ),
                 grasp_config=dict(
                     global_xyz_bounds=[
@@ -111,7 +114,7 @@ base_variant = dict(
             ),
         ),
     ),
-    save_video=True,
+    save_video=False,
     save_video_period=100,
     dump_video_kwargs=dict(
         rows=1,

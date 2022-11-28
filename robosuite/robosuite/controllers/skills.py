@@ -43,7 +43,7 @@ class BaseSkill:
             assert self._config[k] is not None
             self._config[k] = np.array(self._config[k])
 
-        assert self._config['aff_type'] in [None, 'sparse', 'dense']
+        assert self._config['aff_type'] in [None, 'sparse', 'dense', 'leakly_relu']
 
     def get_param_dim(self, base_param_dim):
         assert NotImplementedError

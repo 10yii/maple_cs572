@@ -9,3 +9,5 @@ pip install -e .
 
 cd robosuite
 pip install -e .
+
+## 이후 같은 커맨드로 실행

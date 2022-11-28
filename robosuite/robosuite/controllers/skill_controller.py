@@ -14,7 +14,6 @@ class SkillController:
 
     SKILL_NAMES = [
         'atomic',
-        'atomic_2',
         'reach_osc', 'reach',
         'grasp',
         'push',
@@ -71,9 +70,9 @@ class SkillController:
             if skill_name == 'atomic':
                 skill_class = AtomicSkill
                 skill_config.update(self._config.get('atomic_config', {}))
-            if skill_name == 'atomic_2':
-                skill_class = AtomicSkill
-                skill_config.update(self._config.get('atomic_config', {}))
+            #elif skill_name == 'atomic_2':
+            #    skill_class = AtomicSkill
+            #    skill_config.update(self._config.get('atomic_config', {}))
             elif skill_name == 'reach':
                 skill_class = ReachSkill
                 skill_config.update(self._config.get('reach_config', {}))

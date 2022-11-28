@@ -1,3 +1,4 @@
+import xxlimited
 import numpy as np
 import robosuite.utils.transform_utils as trans
 
@@ -139,6 +140,16 @@ class BaseSkill:
                 dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
                 min_dist = np.min(np.sum(dist, axis=1))
                 aff_reward = 1.0 - np.tanh(self._config['aff_tanh_scaling'] * min_dist)
+        elif self._config['aff_type'] == 'leakly_relu':
+            if aff_success:   
+                aff_reward = 1.0
+            else:
+                def leakly_relu(x):
+                    np.where(x > 0, x, x * 0.01)
+                    
+                dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
+                min_dist = np.min(np.sum(dist, axis=1))
+                aff_reward = 1.0 + leakly_relu(min_dist)
         else:
             aff_reward = float(aff_success)
 

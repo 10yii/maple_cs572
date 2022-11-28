@@ -59,7 +59,7 @@ base_variant = dict(
             reward_scale=5.0,
 
             skill_config=dict(
-                skills=['atomic','atomic_2' ,'open', 'reach', 'grasp', 'push'], # add new skill
+                skills=['atomic' ,'open', 'reach', 'grasp', 'push'], # add new skill
                 aff_penalty_fac=15.0,
 
                 base_config=dict(
@@ -71,7 +71,7 @@ base_variant = dict(
                     binary_gripper=True,
 
                     aff_threshold=0.06,
-                    aff_type='dense',
+                    aff_type='leakly_relu',
                     aff_tanh_scaling=10.0,
                 ),
                 atomic_config=dict(

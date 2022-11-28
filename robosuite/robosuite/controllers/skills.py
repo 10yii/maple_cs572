@@ -145,7 +145,7 @@ class BaseSkill:
                 aff_reward = 1.0
             else:
                 def leakly_relu(x):
-                    np.where(x > 0, x, x * 0.01)
+                    return np.where(x > 0, x, x * 0.01)
                     
                 dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
                 min_dist = np.min(np.sum(dist, axis=1))

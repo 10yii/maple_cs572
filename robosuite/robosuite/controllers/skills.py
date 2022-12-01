@@ -43,7 +43,7 @@ class BaseSkill:
             assert self._config[k] is not None
             self._config[k] = np.array(self._config[k])
 
-        assert self._config['aff_type'] in [None, 'sparse', 'dense', 'leakly_relu']
+        assert self._config['aff_type'] in [None, 'sparse', 'dense', 'leakly_relu','sigmoid']
 
     def get_param_dim(self, base_param_dim):
         assert NotImplementedError
@@ -150,6 +150,15 @@ class BaseSkill:
                 dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
                 min_dist = np.min(np.sum(dist, axis=1))
                 aff_reward = 1.0 + leakly_relu(min_dist)
+        elif self._config['aff_type'] == 'sigmoid':
+            if aff_success:
+                aff_reward = 1.0
+            else:
+                def sigmoid(x):
+                    return 1 / (1 +np.exp(-x))
+                dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
+                min_dist = np.min(np.sum(dist, axis=1))
+                aff_reward = 1.0 - (sigmoid(self._config['aff_tanh_scaling'] * min_dist) - 0.5) * 2
         else:
             aff_reward = float(aff_success)
 

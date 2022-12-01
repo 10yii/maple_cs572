@@ -184,7 +184,7 @@ class SkillController:
             return reward
 
         aff_reward = self.get_aff_reward()
-        assert 0.0 <= aff_reward <= 1.0
+        #assert 0.0 <= aff_reward <= 1.0
         aff_penalty = 1.0 - aff_reward
         aff_penalty_fac = self._config['aff_penalty_fac']
         reward -= (aff_penalty_fac * aff_penalty)

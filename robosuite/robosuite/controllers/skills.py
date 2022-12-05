@@ -158,7 +158,7 @@ class BaseSkill:
                     return 1 / (1 +np.exp(-x))
                 dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
                 min_dist = np.min(np.sum(dist, axis=1))
-                aff_reward = 1.0 - sigmoid(self._config['aff_tanh_scaling'] * min_dist)
+                aff_reward = 1.0 - sigmoid(self._config['aff_tanh_scaling'] * min_dist) * 2
         else:
             aff_reward = float(aff_success)
 

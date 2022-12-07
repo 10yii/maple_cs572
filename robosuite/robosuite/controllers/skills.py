@@ -130,26 +130,36 @@ class BaseSkill:
             return 0.0, False
 
         th = self._config['aff_threshold']
-        within_th = (np.abs(aff_centers - reach_pos) <= th)
-        aff_success = np.any(np.all(within_th, axis=1))
+        
+        if self._config['aff_metric'] is None:
+            within_th = (np.abs(aff_centers - reach_pos) <= th)
+            aff_success = np.any(np.all(within_th, axis=1))
+        else:
+            within_th = (np.linalg.norm(aff_centers - reach_pos, axis = 1) <= th)
+            aff_success = np.all(within_th)
 
         if self._config['aff_type'] == 'dense':
             if aff_success:
                 aff_reward = 1.0
             else:
-                dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
-                min_dist = np.min(np.sum(dist, axis=1))
+                if self._config['aff_metric'] is None:
+                    dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
+                    min_dist = np.min(np.sum(dist, axis=1))
+                else:
+                    dist = np.clip(np.linalg.norm(aff_centers - reach_pos, axis = 1) - th, 0, None)
+                    min_dist = np.min(dist)
                 aff_reward = 1.0 - np.tanh(self._config['aff_tanh_scaling'] * min_dist)
         elif self._config['aff_type'] == 'leakly_relu':
             if aff_success:   
                 aff_reward = 1.0
             else:
                 def leakly_relu(x):
-                    return np.where(x > 0, x, x * 0.01)
+                    return np.where(x > 0, 1 - x, x * 0.01)
                     
                 dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
                 min_dist = np.min(np.sum(dist, axis=1))
-                aff_reward = 1.0 + leakly_relu(min_dist)
+                v = leakly_relu(min_dist)
+                #aff_reward = 1.0 + leakly_relu(min_dist)
         elif self._config['aff_type'] == 'sigmoid':
             if aff_success:
                 aff_reward = 1.0
@@ -158,7 +168,7 @@ class BaseSkill:
                     return 1 / (1 +np.exp(-x))
                 dist = np.clip(np.abs(aff_centers - reach_pos) - th, 0, None)
                 min_dist = np.min(np.sum(dist, axis=1))
-                aff_reward = 1.0 - (sigmoid(self._config['aff_tanh_scaling'] * min_dist - 0.5)) 
+                aff_reward = 1.0 - (sigmoid(self._config['aff_tanh_scaling'] * min_dist) - 0.5) * 2 
         else:
             aff_reward = float(aff_success)
 

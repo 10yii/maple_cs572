@@ -71,8 +71,9 @@ base_variant = dict(
                     binary_gripper=True,
 
                     aff_threshold=0.06,
-                    aff_type='leakly_relu',
+                    aff_type='dense',
                     aff_tanh_scaling=10.0,
+                    aff_metric='euclidean'
                 ),
                 atomic_config=dict(
                     use_ori_params=True,
